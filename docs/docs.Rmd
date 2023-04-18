@@ -927,7 +927,7 @@ nflx_model <- auto.arima(nflx_ts, ic="aic", seasonal=F)
 
 ---
 
-### Netflix Stock - Create and Plot Forecasts ![](Netflix.png)
+### Netflix Stock - Create and Plot Forecasts 
 
 
 -  Create forecasts (until April 2024)
@@ -951,7 +951,7 @@ nflx_forecast <- forecast(nflx_model, h=12)
 
 ---
 
-### Netflix Stock - Create and Plot Forecasts ![](Netflix.png)
+### Netflix Stock - Create and Plot Forecasts 
 
 - Darker purple: 80% Prediction Interval Bounds
 - Lighter purple: 95% Prediction Interval Bounds
@@ -968,7 +968,7 @@ autoplot(nflx_forecast) +
 
 ---
 
-### Netflix Stock - Examine Numerical Forecasts ![](Netflix.png)
+### Netflix Stock - Examine Numerical Forecasts 
 
 - Point Forecast is the forecasted estimate for each future time period
 
