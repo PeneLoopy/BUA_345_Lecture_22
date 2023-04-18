@@ -1,254 +1,13 @@
 ---
-title: "BUA 345 - Lecture 22"
-subtitle: "Introduction to Forecasting"  
+title: "BUA 345 - Lecture 22 - Intro to Forecasting"
 author: "Penelope Pooler Eisenbies"
-date: '`r Sys.Date()`'
-output:
-  xaringan::moon_reader:
-    seal: false
-    css: xaringan-themer.css
-    nature:
-      slideNumberFormat: "%current%/%total%" 
-      highlightStyle: tomorrow-night-bright
-      highlightLines: true
-      ratio: 16:9
-      countIncrementalSlides: true
-      keep_md: true
----
-
-```{r setup, include=FALSE, echo=FALSE}
-options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(
-  fig.retina=2,
-  #out.width = "75%",
-  #out.height = "50%",
-  htmltools.preserve.raw = FALSE,      # needed for windows
-  scipen=100,                          # suppresses scientific notation
-  getSymbols.warning4.0 = FALSE,       # suppresses getSymbols warnings
-  cache = FALSE,
-  echo = TRUE,
-  hiline = TRUE,
-  message = FALSE, 
-  warning = FALSE
-)
-
-
-# install helper package (pacman)
-# pacman loads and installs other packages, if needed
-if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
-
-# install and load required packages
-# pacman should be first package in parentheses and then list others
-pacman::p_load(pacman,tidyverse, magrittr, knitr, gridExtra, forecast, tidyquant, lubridate, maps, usdata, mapproj, ggthemes, RColorBrewer, dygraphs)
-
-# verify packages (comment out in finished documents)
-p_loaded()
-
-
-```
-
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-
-palette <- c(
-  SU_Orange1        = "#F76900",
-  SU_Orange2        = "#FF8E00",
-  SU_Red_Orange     = "#FF431B",
-  SU_Blue1          = "#000E54",
-  SU_Blue2          = "#203299",
-  SU_Light_Blue     = "#2B72D7",
-  SU_White          = "#FFFFFF",
-  SU_Light_Gray     = "#ADB3B8",
-  SU_Medium_Gray    = "#707780",
-  SU_Black          = "#000000", 
-  
-  steel_blue        = "#4682B4",
-  corn_flower_blue  = "#6495ED",
-  deep_sky_blue     = "#00BFFF",
-  dark_magenta      = "#8B008B",
-  medium_orchid     = "#BA55D3",
-  lime_green        = "#32CD32",
-  light_sea_green   = "#20B2AA",
-  chartreuse        = "#7FFF00",
-  orange_red        = "#FF4500",
-  white_smoke       = "#F5F5F5",
-  dark_cyan         = "#008B8B",
-  light_steel_blue  = "#B0C4DE",
-  indigo            = "#4B0082",
-  ivory             = "#FFFFF0",
-  light_slate_grey  = "#778899",
-  linen             = "#FAF0E6",
-  steel_blue        = "#4682B4",
-  blue_violet       = "#8A2BE2",
-  dodger_blue       = "#1E90FF",
-  light_blue        = "#ADD8E6",
-  azure             = "#F0FFFF",
-  lavender          = "#E6E6FA")
-
-primary_color = "#4682B4"                # steel_blue
-secondary_color = "#778899"              # light_slate_grey
-white_color = "#FFFFF0"                  # ivory
-black_color = "#000080"                  # navy
-
-style_duo_accent(
-  primary_color = primary_color,
-  secondary_color = secondary_color,
-  white_color = white_color,
-  black_color = black_color,
-  text_color = black_color,
-  header_color = primary_color,
-  background_color = white_color,
-  code_inline_background_color = "#E6E6FA", # lavender
-  link_color = "#1E90FF",                   # dodger_blue
-  code_inline_color = "#4B0082",            # indigo
-  text_bold_color = "#8B008B",              # dark_magenta
-  header_font_google = google_font("Open Sans"),
-  text_font_google = google_font("Open Sans"),
-  code_font_google = google_font("Source Code Pro"),
-  colors = palette
-)
-
-
-```
-
-```{r xaringan-panelset, echo=FALSE}
-xaringanExtra::use_panelset()
-```
-
-```{r xaringan-tile-view, echo=FALSE}
-xaringanExtra::use_tile_view()
-```
-
-```{r xaringan-fit-screen, echo=FALSE}
-xaringanExtra::use_fit_screen()
-```
-
-```{r xaringan-tachyons, echo=FALSE}
-xaringanExtra::use_tachyons()
-```
-
-```{r xaringan-animate-css, echo=FALSE}
-xaringanExtra::use_animate_css()
-```
-
-```{r xaringan-animate-all, echo=FALSE}
-#xaringanExtra::use_animate_all("slide_up")
-```
-
-background-image: url("docs_files/images/sloth_faded.png")
-background-size: cover
-
-class: bottom, right
-
-## BUA 345 - Lecture 22
-
-### Introduction to Forecasting
-
-<br>
-
-
-#### Penelope Pooler Eisenbies
-
-#### `r Sys.Date()`
-
-[Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
-
----
-
-### Upcoming Dates
-
-.pull-left[
-
-- **HW 9 was due on Monday, 4/17**. 
-
-   - Grace Period ends tonight (Tues. 4/18) at midnight.
-   
-- **HW 10 is due Monday, 4/24**
-
-- **Course Review on 4/27** 
-
-]
-
-.pull-right[
-
-```{r owl pic, echo=FALSE}
-
-knitr::include_graphics("docs_files/images/owl.png")
-
-```
-
-]
-
----
-
-### Reminder of Using R and R Markdown Files
-
-.pull-left[
-
-- Download Zipped R project 
-
-- Open Zipped folder and copy internal folder (R Project) to a BUA 345 folder on your computer NOT IN DOWLOADS
-
-- **Open R Project:**
-  
-  - *OPTION 1:* Click on .Rproj file to open project and RStudio
-
-  - *OPTION 2:* Open RStudio, then click File > Open Project > then navigate to  and click on .Rproj file.
-  
-
-- **Once Project is opened in RStudio:**
-
-  - Click on `code_data_output` file to open it.
-
-  - Click on `BUA_345_Lecture_22.Rmd` to open it.
-
-  - Run `setup` Chunk
-
-
-]
-
-.pull-right[
-
-```{r beaver pic, echo=FALSE}
-
-knitr::include_graphics("docs_files/images/beaver.png")
-
-```
-
-]
-
----
-
-### Setup
-
-.pull-left[
-
-- The setup chunk shows the packages needed for this demo.   
-
-- R will install specified packages if needed (only required once after R is installed)  
-
-- R will load specified packaged (required every time you start a new R session)  
-
-- The first time you run this code, R will install these packages which will be slow.  
-
-- **If you get warnings, that's okay.**  
-
-- If you get **error messages**, I (or TA), can help you.
-
-]
-
-
-.pull-right[
-
-```{r owl pic2, echo=FALSE}
-
-knitr::include_graphics("docs_files/images/owl.png")
-
-```
-
-]
-
-
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    code_folding: show
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
 ---
 
 ### Setup Chunk for Lecture 22
@@ -267,66 +26,15 @@ if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.
 pacman::p_load(pacman,tidyverse, magrittr, knitr, gridExtra, forecast, tidyquant, lubridate, maps, usdata, mapproj, ggthemes, RColorBrewer, dygraphs)
 
 # verify packages - it's a long list
-#p_loaded()
+p_loaded()
 
 ```
-
-**NOTES:**
-
-- Please make sure you can open the provided R project for the practice questions and run the setup chunk without errors.
-- If you are having trouble installing/loading any packages, please come to office hour or make an appointment with me or course TA.
-
----
-
-### Lecture 18 In-class Exercises - Session ID: bua345s23**
-
-#### **Question 1 (L22) - Review from Regression concepts
-  
-We have data for 2022 annual salaries of 75 Upstate NY residents ranging from `$50K` to `$150K`.
-and we use that data to model how much someone spends on their first house.
-
-**Is it valid to apply that model to someone with an annual salary of `$350K`?**
-
-<br>
-
-A. Yes, this is extrapolation and it is valid
-
-B. No this is extrapolation and it is invalid
-
-C. Yes, this is interpolation and it is valid
-
-D No this is interpolation and it is invalid
-
-
----
-
-### Introduction to Forecasting
-
-#### Today's Topics
-
-- **Cross-Sectional Data vs. Time Series Data**
-
-- Basic Forecasting Terminology
-
-- Forecasting Trends without Seasonality in R
-
-  - Example 1 - US Population
-  
-  - Example 2 - Netflix Stock Prices
-  
-#### HW Assignment 10
-
-- **Today:** Questions 2 - 6 
-  
----
-
-.pull-left[
 
 #### Cross-Sectional Data
 
 - Shows a Snapshot of One Time Period
 
-```{r echo = F, message = FALSE, fig.align='center'}
+```{r golden snowball 2023}
 
 gsb23 <- read_csv("gsb_23.csv", show_col_types = F, skip=25, 
                   col_select = c(1,2,6), ) |>
@@ -361,15 +69,11 @@ gsb_long <- gsb23 |> pivot_longer(cols = `2022-23`:Most,
 
 ```
 
-]
-
-.pull-right[
-
 #### Time Series Data
 
 - Shows Trend over Time
 
-```{r syr snowfall timeseries, echo=F, message=F, fig.align='center'}
+```{r snowfall time series}
 
 snowfall <- read_csv("snowfall_upstateny_cities.csv", 
                      show_col_types = F) |>
@@ -407,14 +111,12 @@ snowfall <- read_csv("snowfall_upstateny_cities.csv",
 
 ```
 
-]
-
 ---
 
 ### U.S. Population - Cross-Sectional Data
 
 
-```{r echo=F, message=F, fig.align='center', fig.dim=c(15,7)}
+```{r ln pop map}
 
 us_counties <- map_data("county") |>                 # county polygons
   rename("state" = "region", "county" = "subregion")
@@ -454,7 +156,6 @@ cnty2019_all <- full_join(us_counties,cnty2019_all)   |>
 
 ```
 
-
 ---
 
 ### U.S. Population - Time Series Data
@@ -462,7 +163,7 @@ cnty2019_all <- full_join(us_counties,cnty2019_all)   |>
 - [U.S. Population 1950 - 2023](https://www.macrotrends.net/countries/USA/united-states/population)
 
 
-```{r, echo=F, message=F, fig.align='center', fig.dim=c(15,7)}
+```{r, pop trend}
 
 uspop <- read_csv("pop_trend_1950_2023.csv", show_col_type = F) |>
   select(Time, Value) |>
@@ -489,139 +190,10 @@ uspop <- read_csv("pop_trend_1950_2023.csv", show_col_type = F) |>
 
 ---
 
-### Time Series Terminology
-
-In time series data, new observations are often correlated with prior observations
-
-- This is referred to as **auto-correlation**
-
-  - A variable is correlated with itself
-  
-  - When data are auto-correlated, we use that information
-  
-  - This process is called **auto-regression**
-  
-    - Using previous observations to predict into the future.
-  
-- **R function:** **`auto.arima`** function in **`forecast`** package
-
-  - **ARIMA** is an acronym:
-
-     - **AR:** auto-regressive
-  
-     - **I:** integrated
-  
-     - **MA:** moving average
-  
-- In **ARIMA** models, all three components are optimized to provide a reliable forecast.
-  
----
-
-### Terminology: ARIMA model components (p, d, q)
-
-#### Auto-Regressive Models (AR)
-
-- Similar to a simple linear regression model or non-linear regression model
-
-- Key difference: Regressor or predictor variable is dependent variable with a specific LAG
-
-- Lag (**p**) is how many previous time periods the model looks back to estimate the next time period.
-
-  - If **p = 1**, the model estimates the next time period based on most recent one. 
-   
-     - Looks back **one** time period
-     
-  - If **p = 2**, the model estimates the next time period on time period **BEFORE** the most recent one.
-  
-     - Looks back **two** time periods
-     
----
-
-### Example 1: U.S. Population - 1950 to Present 
-.pull-right[
-
-```{r echo=F, message=F, fig.dim=c(5,4)}
-
-(pop_plt <- uspop |>
-  ggplot() +
-  geom_line(aes(x=Year, y=popM), color="blue", size=1) +
-  theme_classic() + 
-  scale_x_continuous(breaks=seq(1945, 2025, 10)) + 
-  labs(title="U.S. Population - 1950 - 2023", y="Population (millions)") + 
-  theme(plot.background = element_rect(colour = "darkgrey", fill=NA, size=2)))
-
-```
-
-]
-
-.pull-left[
-
-]
-
-- **Forecast Questions:** 
-
-  - What will the U.S. Population be in 2040?
-
-  - What ARIMA model was chosen (p,d,q)?
-  
-<br>
-
-- **Model Assessment Questions:**
-
-  - How valid is our model? 
-  
-     - Check residual plots.
-  
-  - How accurate are our estimates?
-
-     - Examine Prediction Intervals and Prediction Bands
-    
-     - Check fit statistics
-
-
----
-
-### Terminology: ARIMA model components (p, d, q)
-
-#### Differencing (I = Integration) 
-
-- **Stationarity:** mean and variance of data are consistent over timespan
-
-  - needed for accurate modeling
-
-  - Can be verified by examining residuals
-  
-- **Differencing** transforms non-stationary data to stationary
-
-- Differencing order (**d**) determined by model:
-  
-  - if **d = 1:** each obs. is difference from previous one (linear)
-  
-  - if **d = 2:** each obs. is difference of difference from previous one (quadratic)
-  
-
----
-
-### Terminology: ARIMA model components (p, d, q) .pull-right[![](covid_ma.png)]
-
-#### Moving Average (MA)
-
-- Moving average (**q**): how many terms are incorporated into each average within the data. 
-
-- Algorithm calculates the average for a specific number of lagged terms
-
-- Moving Averages smooths out temporary instability in the data 
-
-  - If **q = 1:** moving average is average of current term with the one from the previous time period.
-
-  - If **q = 2:**, moving average is average of the current term with the ones from two previous time periods.
-  
----
-
 
 ### U.S. Population - Interactive Plot
 
-```{r dygraph, echo=F, fig.dim=c(15,7)}
+```{r pop dygraph}
 
 # convert to xts (extensible time series)
 uspop <- uspop |>
@@ -639,7 +211,7 @@ dygraph(uspop_xts, main="US Population 1950 - 2023") |>
 
 ```
 
----
+
 
 ### U.S. Population - Modeling Time Series Data
 
@@ -725,37 +297,16 @@ autoplot(pop_forecast) +
 pop_forecast
 ```
 
----
 
-### Lecture 18 In-class Exercises - Session ID: bua345s23**
-
-#### **Question 2 (L22) - Interpretation of Pop. Prediction Intervals
-
-<br>
-  
-Based on the US Population forecast output, we are 95% certain that U.S population in 2030 will be less than `______` million people? 
-
-**How to input your answer:**
-
-- Round to closest million (whole number)
-
-- If the answer were 123 million (e.g. 123.4233), you would enter 123. 
-
----
 
 ### U.S. Population - Examine Residuals and Model Fit
 
-.pull-left[
 
-```{r pop residual plots, fig.dim=c(5,6)}
+```{r pop residual plots}
 # examine residuals
 checkresiduals(pop_forecast)
 
 ```
-
-]
-
-.pull-right[
 
 #### Examining Residuals:
 
@@ -785,6 +336,7 @@ checkresiduals(pop_forecast)
 (acr <- accuracy(pop_forecast))
 
 ```
+
 #### Fit Statistics for Model Comparisons
 
 - Many options for comparing models
@@ -801,14 +353,10 @@ checkresiduals(pop_forecast)
 
 ### Example 2: Netflix Stock Prices - Data from [Yahoo Finance](https://finance.yahoo.com/)
 
-```{r import Netflix data, results='hide', echo=F}
+```{r import and plot Netflix data}
 
 # import from yahoo finance and plot dygraph
 getSymbols("NFLX", from = "2010-01-01", to = "2023-04-17")
-
-```
-
-```{r echo=F, fig.align='center', fig.dim=c(15,7)}
 
 # create interactive plot
 (nflx_dg <- dygraph(NFLX[,c(2,3,6)], main="Netflix Stock price") |>
@@ -831,7 +379,7 @@ getSymbols("NFLX", from = "2010-01-01", to = "2023-04-17")
 - Data imported are daily adjusted close 
 - Data we will use are monthly adjusted close (1st day of trading for each month)
 
-```{r echo=F, message=F, fig.align='center', fig.dim=c(14,6)}
+```{r nflx monthly plot}
 
 # convert xts to tibble
 nflx <- NFLX |>
@@ -958,7 +506,7 @@ nflx_forecast <- forecast(nflx_model, h=12)
 - Plot shows:
   - Lags (`p = 2`), Differencing (`d = 1`), Moving Average (`q = 2`)
 
-```{r plot nflx forecasts with pred intervals, fig.dim=c(7,4)}
+```{r plot nflx forecasts with pred intervals}
 
 autoplot(nflx_forecast) + 
   labs(y = "Adjusted Closing Price") +
@@ -1004,7 +552,7 @@ In January of 2024, the Netflix stock price is forecasted to be approximately $3
 
 .pull-left[
 
-```{r nflx residual plots, fig.dim=c(5,6)}
+```{r nflx residual plots}
 # examine residuals
 checkresiduals(nflx_forecast)
 
@@ -1057,14 +605,9 @@ checkresiduals(nflx_forecast)
 
 ---
 
-background-image: url("docs_files/images/tired_panda_faded.png")
-background-size: cover
-
-.pull-left[
-
 ### Key Points from Today
 
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
+
 
 - **`forecast`** package in R simplifies forecasting**
  
@@ -1083,17 +626,7 @@ background-size: cover
   - Due Monday, 4/24/2022
    
 
-]
-
-]
-
-.pull-right[
-
-.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3[
 You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. **A minimum of four submissions are required during the semester.**
-]
-
-]
 
 
 
@@ -1101,17 +634,3 @@ You may submit an 'Engagement Question' about each lecture until midnight on the
 
 
  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
