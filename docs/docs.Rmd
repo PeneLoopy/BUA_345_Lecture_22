@@ -278,9 +278,9 @@ pacman::p_load(pacman,tidyverse, magrittr, knitr, gridExtra, forecast, tidyquant
 
 ---
 
-### Lecture 18 In-class Exercises - Session ID: bua345s23**
+### Lecture 22 In-class Exercises - Session ID: bua345s23
 
-#### **Question 1 (L22) - Review from Regression concepts
+#### Question 1 (L22) - Review from Regression concepts
   
 We have data for 2022 annual salaries of 75 Upstate NY residents ranging from `$50K` to `$150K`.
 and we use that data to model how much someone spends on their first house.
@@ -727,9 +727,9 @@ pop_forecast
 
 ---
 
-### Lecture 18 In-class Exercises - Session ID: bua345s23**
+### Lecture 22 In-class Exercises - Session ID: bua345s23
 
-#### **Question 2 (L22) - Interpretation of Pop. Prediction Intervals
+#### Question 2 (L22) - Interpretation of Pop. Prediction Intervals
 
 <br>
   
@@ -983,9 +983,9 @@ nflx_forecast
 
 ---
 
-### Lecture 18 In-class Exercises - Session ID: bua345s23**
+### Lecture 22 In-class Exercises - Session ID: bua345s23
 
-#### **Question 3 (L22) - Interpretation of netflix Prediction Intervals
+#### *uestion 3 (L22) - Interpretation of netflix Prediction Intervals
   
 <br>
 
